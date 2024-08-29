@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 
 // Configuração do pool de conexões com o PostgreSQL
 const pool = new Pool({
-    user: 'postgresql',
+    user: 'postgres',
     host: 'localhost',
     database: 'meu_projeto',
     password: 'root',
