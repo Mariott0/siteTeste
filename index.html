@@ -11,7 +11,7 @@
             background-color: #f4f4f4;
             color: #333;
             text-align: center;
-            padding: 50px;a
+            padding: 50px;
         }
 
         h1 {
@@ -28,7 +28,7 @@
         }
 
         img {
-            max-width: 100%;
+            max-width: 50%; /* Reduz o tamanho da imagem para 50% do container */
             height: auto;
             border-radius: 10px;
         }
@@ -37,6 +37,49 @@
             font-style: italic;
             margin-top: 10px;
             color: #555;
+        }
+
+        .comments-section {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .comments-section h2 {
+            color: #0066cc;
+        }
+
+        #commentForm {
+            margin-bottom: 20px;
+        }
+
+        #commentText {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #commentsList {
+            margin-top: 20px;
+        }
+
+        .comment {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 14px;
+            color: #777;
         }
     </style>
 </head>
@@ -50,6 +93,54 @@
         <img src="amor.jpg" alt="Nathan e sua namorada">
         <div class="caption">Esse sou eu e minha namorada linda</div>
     </div>
+
+    <div class="comments-section">
+        <h2>Comentários</h2>
+        <form id="commentForm">
+            <textarea id="commentText" rows="4" placeholder="Escreva seu comentário aqui..." required></textarea>
+            <br>
+            <button type="submit">Enviar</button>
+        </form>
+        <div id="commentsList"></div>
+    </div>
+
+    <footer>
+        &copy; <span id="currentYear"></span> Desenvolvido por ITZ.
+    </footer>
+
+    <script>
+        // Script para atualizar o ano no rodapé automaticamente
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Função para carregar os comentários salvos
+        function loadComments() {
+            const commentsList = document.getElementById('commentsList');
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            commentsList.innerHTML = '';
+            comments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.textContent = comment;
+                commentsList.appendChild(commentDiv);
+            });
+        }
+
+        // Função para salvar um novo comentário
+        document.getElementById('commentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const commentText = document.getElementById('commentText').value;
+            if (commentText.trim() !== '') {
+                const comments = JSON.parse(localStorage.getItem('comments')) || [];
+                comments.push(commentText);
+                localStorage.setItem('comments', JSON.stringify(comments));
+                document.getElementById('commentText').value = '';
+                loadComments();
+            }
+        });
+
+        // Carregar os comentários ao iniciar a página
+        loadComments();
+    </script>
 </body>
 
 </html>
