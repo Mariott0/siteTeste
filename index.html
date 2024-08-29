@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +27,7 @@
         }
 
         img {
-            max-width: 50%; /* Reduz o tamanho da imagem para 50% do container */
+            max-width: 50%; /* Diminui o tamanho da imagem */
             height: auto;
             border-radius: 10px;
         }
@@ -39,108 +38,72 @@
             color: #555;
         }
 
-        .comments-section {
-            margin-top: 40px;
+        .comment-section {
+            margin-top: 30px;
             text-align: left;
         }
 
-        .comments-section h2 {
-            color: #0066cc;
-        }
-
-        #commentForm {
-            margin-bottom: 20px;
-        }
-
-        #commentText {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        #commentsList {
-            margin-top: 20px;
-        }
-
         .comment {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
+            background-color: #e9e9e9;
             border-radius: 5px;
-        }
-
-        .comment:last-child {
-            border-bottom: none;
-        }
-
-        footer {
-            margin-top: 50px;
-            font-size: 14px;
-            color: #777;
+            padding: 10px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
-
 <body>
     <h1>Bem-vindo à página de Nathan Mariotto!</h1>
-    <p>Esta é uma página simples criada para representar o Nathan Mariotto. Aqui você pode encontrar informações e
-        conteúdos relacionados a ele.</p>
+    <p>Esta é uma página simples criada para representar o Nathan Mariotto. Aqui você pode encontrar informações e conteúdos relacionados a ele.</p>
 
     <div class="image-container">
         <img src="amor.jpg" alt="Nathan e sua namorada">
         <div class="caption">Esse sou eu e minha namorada linda</div>
     </div>
 
-    <div class="comments-section">
+    <!-- Seção do vídeo aqui -->
+
+    <div class="comment-section">
         <h2>Comentários</h2>
         <form id="commentForm">
-            <textarea id="commentText" rows="4" placeholder="Escreva seu comentário aqui..." required></textarea>
-            <br>
+            <textarea id="commentText" rows="4" cols="50" placeholder="Deixe seu comentário..."></textarea><br>
             <button type="submit">Enviar</button>
         </form>
         <div id="commentsList"></div>
     </div>
 
-    <footer>
-        &copy; <span id="currentYear"></span> Desenvolvido por ITZ.
-    </footer>
-
     <script>
-        // Script para atualizar o ano no rodapé automaticamente
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        // Função para carregar os comentários salvos
-        function loadComments() {
+        async function loadComments() {
+            const response = await fetch('http://localhost:3000/comments');
+            const comments = await response.json();
             const commentsList = document.getElementById('commentsList');
-            const comments = JSON.parse(localStorage.getItem('comments')) || [];
             commentsList.innerHTML = '';
             comments.forEach(comment => {
                 const commentDiv = document.createElement('div');
                 commentDiv.className = 'comment';
-                commentDiv.textContent = comment;
+                commentDiv.textContent = comment.text;
                 commentsList.appendChild(commentDiv);
             });
         }
 
-        // Função para salvar um novo comentário
-        document.getElementById('commentForm').addEventListener('submit', function (event) {
+        document.getElementById('commentForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             const commentText = document.getElementById('commentText').value;
             if (commentText.trim() !== '') {
-                const comments = JSON.parse(localStorage.getItem('comments')) || [];
-                comments.push(commentText);
-                localStorage.setItem('comments', JSON.stringify(comments));
+                const response = await fetch('http://localhost:3000/comments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: commentText })
+                });
                 document.getElementById('commentText').value = '';
                 loadComments();
             }
         });
 
-        // Carregar os comentários ao iniciar a página
         loadComments();
     </script>
-</body>
 
+    <footer>
+        <p>&copy; <script>document.write(new Date().getFullYear());</script> Desenvolvido por ITZ</p>
+    </footer>
+</body>
 </html>
