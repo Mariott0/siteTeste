@@ -1,20 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { Pool } = require('pg');
+const path = require('path');
+const { pool } = require('./db'); // Importa a configuração do banco de dados
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public'))); // Serve arquivos estáticos
 
-// Configuração do pool de conexões com o PostgreSQL
-const pool = new Pool({
-    user: 'postgres',
-    host: '127.0.0.1',
-    database: 'meu_projeto',
-    password: 'root',
-    port: 5432,
-});
-
-// Endpoint para obter todos os comentários
 app.get('/comments', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM comments ORDER BY created_at DESC');
@@ -25,7 +17,6 @@ app.get('/comments', async (req, res) => {
     }
 });
 
-// Endpoint para adicionar um novo comentário
 app.post('/comments', async (req, res) => {
     const { text } = req.body;
     try {

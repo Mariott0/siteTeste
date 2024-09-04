@@ -1,56 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Nathan Mariotto</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            text-align: center;
-            padding: 50px;
-        }
-
-        h1 {
-            color: #0066cc;
-        }
-
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        .image-container {
-            margin-top: 30px;
-        }
-
-        img {
-            max-width: 50%; /* Diminui o tamanho da imagem */
-            height: auto;
-            border-radius: 10px;
-        }
-
-        .caption {
-            font-style: italic;
-            margin-top: 10px;
-            color: #555;
-        }
-
-        .comment-section {
-            margin-top: 30px;
-            text-align: left;
-        }
-
-        .comment {
-            background-color: #e9e9e9;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <h1>Bem-vindo à página de Nathan Mariotto!</h1>
     <p>Esta é uma página simples criada para representar o Nathan Mariotto. Aqui você pode encontrar informações e conteúdos relacionados a ele.</p>
@@ -60,50 +17,28 @@
         <div class="caption">Esse sou eu e minha namorada linda</div>
     </div>
 
-    <!-- Seção do vídeo aqui -->
+    <div class="video-container">
+        <video width="600" controls>
+            <source src="amor.mkv" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+    </div>
 
-    <div class="comment-section">
+    <div class="comments-section">
         <h2>Comentários</h2>
         <form id="commentForm">
-            <textarea id="commentText" rows="4" cols="50" placeholder="Deixe seu comentário..."></textarea><br>
+            <textarea id="commentText" rows="4" cols="50" placeholder="Digite seu comentário aqui..."></textarea><br>
             <button type="submit">Enviar</button>
         </form>
         <div id="commentsList"></div>
     </div>
 
-    <script>
-        async function loadComments() {
-            const response = await fetch('http://localhost:3000/comments');
-            const comments = await response.json();
-            const commentsList = document.getElementById('commentsList');
-            commentsList.innerHTML = '';
-            comments.forEach(comment => {
-                const commentDiv = document.createElement('div');
-                commentDiv.className = 'comment';
-                commentDiv.textContent = comment.text;
-                commentsList.appendChild(commentDiv);
-            });
-        }
-
-        document.getElementById('commentForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const commentText = document.getElementById('commentText').value;
-            if (commentText.trim() !== '') {
-                const response = await fetch('http://localhost:3000/comments', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: commentText })
-                });
-                document.getElementById('commentText').value = '';
-                loadComments();
-            }
-        });
-
-        loadComments();
-    </script>
-
     <footer>
-        <p>&copy; <script>document.write(new Date().getFullYear());</script> Desenvolvido por rITZ</p>
+        &copy; <span id="currentYear"></span> Desenvolvido por rITZ
     </footer>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
+    
